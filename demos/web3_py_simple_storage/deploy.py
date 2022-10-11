@@ -1,4 +1,6 @@
-from solcx import compile_standard
+from solcx import compile_standard, install_solc
+
+# solcx.install_solc("0.8.0")
 import json
 
 with open("./SimpleStorage.sol", "r") as file:
