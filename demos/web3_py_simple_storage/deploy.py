@@ -44,7 +44,7 @@ abi = compiled_sol["contracts"]["SimpleStorage.sol"]["SimpleStorage"]["abi"]
 # for connecting with ganache
 w3 = Web3(Web3.HTTPProvider("http://127.0.0.1:7545"))
 chain_id = 1337
-my_address = "0x69ba60500a4335ef48524A0605ec0DB6438e4440"
+my_address = "0xE02E4Ce340e0E45565F701Fa3A8248Ea87AcC130"
 private_key = os.getenv("PRIVATE_KEY")
 
 
@@ -79,7 +79,38 @@ simple_storage = w3.eth.contract(address=tx_receipt.contractAddress, abi=abi)
 # Call ->   Simuate making the call and getting the value - they do not change the blockchain - blue buttons in remix
 # Transact -> Actually make a state change - orange buttons in remix
 
-# This is the initial value of favoriteNumber
-print(simple_storage.functions.retrieve().call())
 
-print(simple_storage.functions.store(15).call())
+### Short input on call()
+# This is the initial value of favoriteNumber
+# print(simple_storage.functions.retrieve().call())
+# print(simple_storage.functions.store(15).call())
+# print(
+#     simple_storage.functions.retrieve().call()
+# )  # We see it is still 0 - we are not working on the chain - calling is just a simulation
+
+# 0
+# 15
+# 0
+# ##
+
+# Working with deployed Contracts
+simple_storage = w3.eth.contract(address=tx_receipt.contractAddress, abi=abi)
+print(f"Initial Stored Value {simple_storage.functions.retrieve().call()}")
+greeting_transaction = simple_storage.functions.store(15).buildTransaction(
+    {
+        "chainId": chain_id,
+        "gasPrice": w3.eth.gas_price,
+        "from": my_address,
+        "nonce": nonce + 1,
+    }
+)
+signed_greeting_txn = w3.eth.account.sign_transaction(
+    greeting_transaction, private_key=private_key
+)
+tx_greeting_hash = w3.eth.send_raw_transaction(signed_greeting_txn.rawTransaction)
+print("Updating stored Value...")
+tx_receipt = w3.eth.wait_for_transaction_receipt(
+    tx_greeting_hash
+)  # This updated the blockchain and was actually sent to it
+
+print(simple_storage.functions.retrieve().call())
