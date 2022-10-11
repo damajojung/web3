@@ -75,3 +75,11 @@ tx_receipt = w3.eth.wait_for_transaction_receipt(
 
 # Working with a contract, you always need: Contract address & ABI
 
+simple_storage = w3.eth.contract(address=tx_receipt.contractAddress, abi=abi)
+# Call ->   Simuate making the call and getting the value - they do not change the blockchain - blue buttons in remix
+# Transact -> Actually make a state change - orange buttons in remix
+
+# This is the initial value of favoriteNumber
+print(simple_storage.functions.retrieve().call())
+
+print(simple_storage.functions.store(15).call())

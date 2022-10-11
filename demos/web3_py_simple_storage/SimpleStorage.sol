@@ -30,9 +30,10 @@ contract SimpleStorage {
     // A dictionary like data structure with 1 value per key
     mapping(string => uint256) public nameToFavoriteNumber; // the string is going to be mapped to uint256
 
-    function store(uint256 _favoriteNumber) public {
+    function store(uint256 _favoriteNumber) public returns (uint256) {
         favoriteNumber = _favoriteNumber;
         // uint test = 4; //this is a local variable, can only be used within the function
+        return favoriteNumber;
     }
 
     // view & pure:
