@@ -15,5 +15,8 @@ compiled_sol = compile_standard(
                 "*": {"*": ["abi", "metadata", "evm.bytecode", "evm.sourceMap"]}
             }
         },
-    }
+    },
+    solc_version="0.6.0",
 )
+
+print(compiled_sol)
