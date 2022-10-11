@@ -1,12 +1,14 @@
 from solcx import compile_standard
 import json
 from web3 import Web3
+import os
+from dotenv import load_dotenv
 
+load_dotenv()
 # solcx.install_solc("0.8.0")
 
 with open("./SimpleStorage.sol", "r") as file:
     simple_storage_file = file.read()
-    print(simple_storage_file)
 
 # Compile our solidity
 
@@ -40,11 +42,36 @@ abi = compiled_sol["contracts"]["SimpleStorage.sol"]["SimpleStorage"]["abi"]
 
 # Where should we deploy it to? We can do it with Ganache
 # for connecting with ganache
-w3 = Web3(Web3.HTTPProvider("HTTP://127.0.0.1:7545"))
-chain_id = 5777
+w3 = Web3(Web3.HTTPProvider("http://127.0.0.1:7545"))
+chain_id = 1337
 my_address = "0x69ba60500a4335ef48524A0605ec0DB6438e4440"
-private_key = "0xf37f163310b25931f88fe6793298707170e2bb07a35eec8723d438faf5ca83fe"
+private_key = os.getenv("PRIVATE_KEY")
+
 
 # Create the contract in python
 SimpleStorage = w3.eth.contract(abi=abi, bytecode=bytecode)
-print(SimpleStorage)
+# Get latest transaction
+nonce = w3.eth.getTransactionCount(my_address)
+
+# 1. Build transaction
+# 2. Sign transaction
+# 3. Send transaction
+transaction = SimpleStorage.constructor().buildTransaction(
+    {
+        "gasPrice": w3.eth.gas_price,
+        "chainId": chain_id,
+        "from": my_address,
+        "nonce": nonce,
+    }
+)
+
+signed_txn = w3.eth.account.sign_transaction(transaction, private_key=private_key)
+
+# send this signed transaction
+tx_hash = w3.eth.send_raw_transaction(signed_txn.rawTransaction)
+tx_receipt = w3.eth.wait_for_transaction_receipt(
+    tx_hash
+)  # This will stop the code until the transaction goes through
+
+# Working with a contract, you always need: Contract address & ABI
+
