@@ -11,7 +11,7 @@ with open("./SimpleStorage.sol", "r") as file:
 
 compiled_sol = compile_standard(
     {
-        "Language": "Solidity",
+        "language": "Solidity",
         "sources": {"SimpleStorage.sol": {"content": simple_storage_file}},
         "settings": {
             "outputSelection": {
