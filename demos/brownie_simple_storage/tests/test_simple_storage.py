@@ -12,3 +12,15 @@ def test_deploy():
     # Assert
     assert starting_value == expected
 
+
+def test_updating_storage():
+    # Arrange
+    account = accounts[0]
+    simple_storage = SimpleStorage.deploy({"from": account})
+
+    # Act
+    expected = 15
+    simple_storage.store(expected, {"from": account})
+
+    # Assert
+    assert expected == simple_storage.retrieve()
