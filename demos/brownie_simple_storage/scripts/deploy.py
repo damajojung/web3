@@ -1,2 +1,9 @@
+from brownie import accounts
+
+
+def deploy_simple_storage():
+    account = accounts[0]
+
+
 def main():
-    print("Hello Brownie.")
+    deploy_simple_storage()
