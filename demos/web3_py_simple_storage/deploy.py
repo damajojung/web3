@@ -42,9 +42,11 @@ abi = compiled_sol["contracts"]["SimpleStorage.sol"]["SimpleStorage"]["abi"]
 
 # Where should we deploy it to? We can do it with Ganache
 # for connecting with ganache
-w3 = Web3(Web3.HTTPProvider("http://127.0.0.1:7545"))
+w3 = Web3(
+    Web3.HTTPProvider("http://127.0.0.1:8545")
+)  # Change this with URL in order to connect with main or test net
 chain_id = 1337
-my_address = "0xE02E4Ce340e0E45565F701Fa3A8248Ea87AcC130"
+my_address = "0x90F8bf6A479f320ead074411a4B0e7944Ea8c9C1"
 private_key = os.getenv("PRIVATE_KEY")
 
 
