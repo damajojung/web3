@@ -1,5 +1,5 @@
 from brownie import network, config, accounts
-from scripts.helpful_scripts import get_account
+# from scripts.helpful_scripts import get_account
 
 
 def get_account():
