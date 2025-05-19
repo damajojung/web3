@@ -7,6 +7,8 @@
 """
 
 # We'll learn a new way to do interfaces later...
+# This is the ABI for getting the eth usd price from chainlink
+# this basically tells you which functions are available from the data provider side
 interface AggregatorV3Interface:
     def decimals() -> uint8: view
     def description() -> String[1000]: view
