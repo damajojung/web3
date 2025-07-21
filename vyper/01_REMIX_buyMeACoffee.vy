@@ -3,8 +3,11 @@
 @license MIT 
 @title Buy Me A Coffee!
 @author You!
-@notice This contract is for creating a sample funding contract. WORKS WITHOUT SEPOLIA!
+@notice This contract is for creating a sample funding contract
 """
+
+# For running this contract: 0.1 ETH = 100000000 GWEI 
+# Chainlink Seplia ETH/UDS 0x694AA1769357215DE4FAC081bf1f309aDC325306
 
 # We'll learn a new way to do interfaces later...
 interface AggregatorV3Interface:
@@ -15,7 +18,7 @@ interface AggregatorV3Interface:
 
 # Constants & Immutables
 MINIMUM_USD: public(constant(uint256)) = as_wei_value(5, "ether")
-PRICE_FEED: public(immutable(AggregatorV3Interface)) # 0x694AA1769357215DE4FAC081bf1f309aDC325306 sepolia
+PRICE_FEED: public(immutable(AggregatorV3Interface)) # 0x694AA1769357215DE4FAC081bf1f309aDC325306 sepolia 
 OWNER: public(immutable(address))
 PRECISION: constant(uint256) = 1 * (10 ** 18)
 
@@ -70,11 +73,17 @@ def _get_eth_to_usd_rate(eth_amount: uint256) -> uint256:
     Chris sent us 0.01 ETH for us to buy a coffee
     Is that more or less than $5?
     """
-
     # new
     # MOCK: Just return a fake USD value to bypass Chainlink for local testing
     return 10 * PRECISION  # Assume every ETH is worth $10
 
+@external
+@view
+def get_total_funded() -> uint256:
+    total: uint256 = 0
+    for funder: address in self.funders:
+        total += self.funder_to_amount_funded[funder]
+    return total
 
 @external 
 @view 
